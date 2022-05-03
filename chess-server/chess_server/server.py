@@ -43,7 +43,7 @@ class ChessServer(object):
 
 
         async def startserver():
-            async with websockets.serve(sockethandler, "localhost", 8765):
+            async with websockets.serve(sockethandler, port=8765):
                 self.running = True
                 await asyncio.Future()  # run forever
 
