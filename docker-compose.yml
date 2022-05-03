@@ -1,0 +1,9 @@
+services:
+  client:
+    build: chess-client
+    ports:
+      - "3000:3000"
+  server:
+    build: chess-server
+    ports:
+      - "8765:8765"

@@ -4,7 +4,7 @@ import React, { useState, useEffect} from 'react';
 import { Chess } from 'chess.js';
 import { useLocation } from "react-router-dom";
 
-const ws = new WebSocket('ws://localhost:8765')
+const ws = new WebSocket('ws://server:8765')
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 const game = Chess(STARTING_FEN)
 
