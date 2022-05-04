@@ -2,7 +2,8 @@ import Chessboard from 'chessboardjsx'
 import './App.css';
 import React, { useState, useEffect} from 'react';
 import { Chess } from 'chess.js';
-import { useLocation } from "react-router-dom";
+import { useBeforeunload } from 'react-beforeunload';
+
 
 const ws = new WebSocket('ws://localhost:8765')
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
@@ -27,6 +28,10 @@ function App() {
     };
     const color = window.location.search.split("=")[1];
     setOrient(color)
+  })
+  useBeforeunload(() => {
+    console.log('closing connection')
+    ws.close()
   })
 
 
