@@ -5,7 +5,8 @@ import { Chess } from 'chess.js';
 import { useBeforeunload } from 'react-beforeunload';
 
 
-const ws = new WebSocket('ws://localhost:8765')
+const SERVER_HOST = 'server'
+const ws = new WebSocket('ws://server:8765')
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 const game = Chess(STARTING_FEN)
 

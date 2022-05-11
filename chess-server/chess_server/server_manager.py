@@ -17,7 +17,7 @@ async def registerPlayer():
         server = ChessServer(port=available_ports.pop())
         need_one_player_servers.append(server)
         asyncio.create_task(server.start())
-    server.addPlayer(id)
+        print('added')
     return {'port': server.port}
 
-app.run(host='localhost', port=5000)
+app.run(port=5000)
