@@ -1,5 +1,11 @@
-from chess_server import __version__
+import pytest
+
+from chess_server.server import ChessServer
+
+server = ChessServer(port=8765)
+pytest_plugins = ('pytest_asyncio',)
 
 
-def test_version():
-    assert __version__ == '0.1.0'
+@pytest.mark.asyncio
+async def test_version():
+    await server.start()
