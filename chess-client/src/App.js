@@ -5,30 +5,52 @@ import { Chess } from 'chess.js';
 import { useBeforeunload } from 'react-beforeunload';
 
 
-const SERVER_HOST = 'server'
-const ws = new WebSocket('ws://server:8765')
+const ws = new WebSocket('ws://localhost:8765')
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 const game = Chess(STARTING_FEN)
 
 function App() {
-  const [fen, setFen] = useState(STARTING_FEN);
-  const [connected, setConnected] = useState(false)
-  const [orient, setOrient] = useState("white")
+  const [side, setSide] = useState('WHITE');
+  const [playerId, setPlayerId] = useState('')
+  const [gameId, setGameId] = useState('')
+  const [fen, setFen] = useState(STARTING_FEN)
+
+  let handleGameInit = (data)  => {
+    let side = data['side']
+    let playerId = data['playerId']
+    let gameId = data['gameId']
+    setSide(side)
+    setPlayerId(playerId)
+    setGameId(gameId)
+    console.log('gameID: ' + gameId)
+    console.log('playerID: ' + playerId)
+    console.log('side: ' + side)
+  }
+
+  let handleGameState = (data) => {
+    let fen = data['fen']
+    setFen(fen)
+  }
 
   let handleMessage = (data) => {
-    console.log(data)
-    setFen(data)
-    game.load(data)
+    let message = JSON.parse(data)
+    console.log(JSON.stringify(message))
+    let type = message['type']
+    switch(type) {
+      case 'gameInit':
+        handleGameInit(message)
+        break
+      case 'gameState':
+        handleGameState(message)
+        break
+    }
   }
   useEffect(() => {
     ws.onmessage = function (event) {
       handleMessage(event.data)
     }
     ws.onopen = function (event) {
-      setConnected(true)
     };
-    const color = window.location.search.split("=")[1];
-    setOrient(color)
   })
   useBeforeunload(() => {
     console.log('closing connection')
@@ -39,15 +61,20 @@ function App() {
   let onDrop = (event) => {
     let sourceSquare = event.sourceSquare
     let targetSquare = event.targetSquare
-    let move = game.move(sourceSquare + '-' + targetSquare, {sloppy: true})
-    setFen(game.fen())
+    let move = {'from': sourceSquare, 'to': targetSquare}
+    let x = game.move(move)
+    console.log(JSON.stringify(x))
+    move = {'from': sourceSquare.toUpperCase(), 'to': targetSquare.toUpperCase(), 'promotion': null}
+    //setFen(game.fen())
     // send movement message to the server
-    console.log('sent: ' + game.fen())
-    ws.send(game.fen())
+    let message = {'gameId': gameId, 'playerId': playerId, 'move': move, 'type': 'move'}
+
+    console.log('sent: ' + JSON.stringify(message))
+    ws.send(JSON.stringify(message))
   }
   return (
     <div className="App">
-      <Chessboard position={fen} onDrop={onDrop} orientation={orient}/>
+      <Chessboard position={fen} onDrop={onDrop} orientation={side}/>
     </div>
   );
 }
