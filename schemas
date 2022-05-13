@@ -1,0 +1,6 @@
+{"gameId":"ac40532a-6b44-45a7-8e91-ac9cb3bbfbc0","playerId":"dc163616-cd0a-4cc4-8fda-c3a5a41b79f0","side":"BLACK","type":"gameInit"}
+
+
+{"gameId":"8d984fd3-3318-4e07-b604-e70c5d719b12","fen":"game_fen_here","type":"gameState"}
+
+{"gameId":"9e017362-4546-4d89-8b02-753dd1142f4b","playerId":"dd1aaf28-c291-4618-9990-316fb0c39c04","move":{"from":"E1","to":"A4","promotion":"NONE"},"type":"move"}
